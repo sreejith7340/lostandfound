@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard – Campus Lost &amp; Found</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #0ea5e9;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --sidebar-bg: #0f172a;
+            --sidebar-width: 260px;
+            --header-height: 64px;
+            --bg: #f1f5f9;
+            --card-bg: #fff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-brand {
+            padding: 1.5rem 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .sidebar-brand .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .sidebar-brand .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #6366f1, #0ea5e9);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-brand .logo-text {
+            font-size: 0.95rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #818cf8, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .sidebar-brand .logo-sub {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.35);
+            font-weight: 400;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem 0;
+            overflow-y: auto;
+        }
+
+        .nav-section {
+            padding: 0.5rem 1.25rem;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.25);
+            margin-top: 0.75rem;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.65rem 1.25rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .sidebar-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+            border-left-color: rgba(99, 102, 241, 0.5);
+        }
+
+        .sidebar-link.active {
+            color: white;
+            background: rgba(99, 102, 241, 0.15);
+            border-left-color: #6366f1;
+        }
+
+        .sidebar-link i {
+            width: 18px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .sidebar-link .badge-pill {
+            margin-left: auto;
+            background: var(--danger);
+            color: white;
+            border-radius: 50px;
+            padding: 2px 7px;
+            font-size: 0.68rem;
+            font-weight: 700;
+        }
+
+        .sidebar-footer {
+            padding: 1rem 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 0.75rem;
+        }
+
+        .admin-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #6366f1, #0ea5e9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .admin-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .admin-role {
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* MAIN */
+        .main-wrap {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: var(--header-height);
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .topbar-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .topbar-search {
+            flex: 1;
+            max-width: 320px;
+            position: relative;
+        }
+
+        .topbar-search input {
+            width: 100%;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+            font-size: 0.875rem;
+            outline: none;
+            background: var(--bg);
+        }
+
+        .topbar-search i {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-left: auto;
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--muted);
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .notif-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 8px;
+            height: 8px;
+            background: var(--danger);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        /* PAGE CONTENT */
+        .page-content {
+            flex: 1;
+            padding: 1.5rem;
+        }
+
+        .section-page {
+            display: none;
+        }
+
+        .section-page.active {
+            display: block;
+        }
+
+        /* STAT CARDS */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.25rem;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            opacity: 0.08;
+            transform: translate(20px, -20px);
+        }
+
+        .stat-card.blue::after {
+            background: #6366f1;
+        }
+
+        .stat-card.red::after {
+            background: #ef4444;
+        }
+
+        .stat-card.green::after {
+            background: #10b981;
+        }
+
+        .stat-card.yellow::after {
+            background: #f59e0b;
+        }
+
+        .stat-card.purple::after {
+            background: #8b5cf6;
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-icon.blue {
+            background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+            color: #6366f1;
+        }
+
+        .stat-icon.red {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            color: #ef4444;
+        }
+
+        .stat-icon.green {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #10b981;
+        }
+
+        .stat-icon.yellow {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #f59e0b;
+        }
+
+        .stat-icon.purple {
+            background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+            color: #8b5cf6;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 500;
+            margin-top: 0.35rem;
+        }
+
+        .stat-trend {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .trend-up {
+            color: var(--success);
+        }
+
+        /* TABLE */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: #f8fafc;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.875rem;
+            vertical-align: middle;
+        }
+
+        .data-table tr:hover td {
+            background: #f8fafc;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* BADGE */
+        .badge-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 50px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .bs-pending {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .bs-approved {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .bs-rejected {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .bs-claimed {
+            background: #ede9fe;
+            color: #7c3aed;
+        }
+
+        /* CARD */
+        .dash-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .dash-card-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* PROGRESS */
+        .progress-item {
+            margin-bottom: 1rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .progress-bar-wrap {
+            background: #f1f5f9;
+            border-radius: 50px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 50px;
+            transition: width 1s ease;
+        }
+
+        /* ACTION BUTTONS */
+        .btn-sm-action {
+            padding: 4px 10px;
+            border-radius: 7px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-approve {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .btn-approve:hover {
+            background: #059669;
+            color: white;
+        }
+
+        .btn-reject {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-reject:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-edit {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+
+        .btn-edit:hover {
+            background: #0284c7;
+            color: white;
+        }
+
+        .btn-view {
+            background: #ede9fe;
+            color: #7c3aed;
+        }
+
+        .btn-view:hover {
+            background: #7c3aed;
+            color: white;
+        }
+
+        .btn-block {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .btn-block:hover {
+            background: #b45309;
+            color: white;
+        }
+
+        /* ITEM IMG */
+        .item-thumb {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+
+        .item-thumb-ph {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        /* ACTIVITY */
+        .activity-item {
+            display: flex;
+            gap: 12px;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-dot {
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+
+        .activity-text {
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        /* NOTIFICATION */
+        .notif-item {
+            display: flex;
+            gap: 12px;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .notif-item:hover {
+            border-color: var(--primary);
+            background: #fafbff;
+        }
+
+        .notif-item.unread {
+            background: #fafbff;
+            border-color: #c7d2fe;
+        }
+
+        .notif-icon {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        /* RESPONSIVE */
+        .hamburger {
+            display: none;
+            margin-right: 1rem;
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: var(--muted);
+        }
+
+        @media(max-width:768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-wrap {
+                margin-left: 0;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--muted);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            opacity: 0.3;
+            display: block;
+            margin-bottom: 0.75rem;
+        }
+
+        /* FORM CONTROL */
+        .form-ctrl {
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 0.6rem 0.875rem;
+            font-size: 0.875rem;
+            width: 100%;
+            outline: none;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-ctrl:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-lbl {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            display: block;
+            color: var(--text);
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-hdr {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-hdr h5 {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: var(--muted);
+            line-height: 1;
+        }
+
+        .btn-primary-sm {
+            background: linear-gradient(135deg, #6366f1, #0ea5e9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1.25rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary-sm:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-light-sm {
+            background: #f1f5f9;
+            color: var(--text);
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1.25rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .toast-wrap {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toast-item {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0.875rem 1.25rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.875rem;
+            animation: slideIn 0.3s ease;
+            min-width: 280px;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1
+            }
+        }
+
+        .toast-item.success i {
+            color: var(--success);
+        }
+
+        .toast-item.error i {
+            color: var(--danger);
+        }
+
+        .toast-item.info i {
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <a href="/" class="logo">
+                <div class="logo-icon"><i class="bi bi-search-heart"></i></div>
+                <div>
+                    <div class="logo-text">Campus L&amp;F</div>
+                    <div class="logo-sub">Admin Panel</div>
+                </div>
+            </a>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section">Main</div>
+            <a class="sidebar-link active" data-page="dashboard"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+            <a class="sidebar-link" data-page="manage-items"><i class="bi bi-boxes"></i> Manage Items</a>
+            <a class="sidebar-link" data-page="lost-items"><i class="bi bi-exclamation-circle"></i> Lost Items
+                Reported</a>
+
+            <div class="nav-section">Claims &amp; Users</div>
+            <a class="sidebar-link" data-page="reporters"><i class="bi bi-people"></i> Reporters</a>
+            <a class="sidebar-link" data-page="claims"><i class="bi bi-hand-thumbs-up"></i> Claim Requests <span
+                    class="badge-pill" id="pendingClaimsBadge">0</span></a>
+            <a class="sidebar-link" data-page="claimed-items"><i class="bi bi-check-circle"></i> Claimed Items</a>
+
+            <div class="nav-section">System</div>
+            <a class="sidebar-link" data-page="notifications"><i class="bi bi-bell"></i> Notifications</a>
+            <a class="sidebar-link" data-page="users"><i class="bi bi-person-gear"></i> User Management</a>
+            <a class="sidebar-link" data-page="logs"><i class="bi bi-journal-text"></i> System Logs</a>
+            <a class="sidebar-link" id="logoutBtn"><i class="bi bi-box-arrow-left"></i> Logout</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="admin-info">
+                <div class="admin-avatar" id="adminAvatar">A</div>
+                <div>
+                    <div class="admin-name" id="adminName">Administrator</div>
+                    <div class="admin-role">Super Admin</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-wrap">
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <i class="bi bi-list hamburger" id="hamburgerBtn"></i>
+            <div class="topbar-title" id="topbarTitle">Dashboard</div>
+            <div class="topbar-search">
+                <i class="bi bi-search"></i>
+                <input type="text" id="globalSearch" placeholder="Search items, users…" />
+            </div>
+            <div class="topbar-actions">
+                <div class="icon-btn" data-page="notifications" title="Notifications">
+                    <i class="bi bi-bell"></i>
+                    <span class="notif-dot" id="notifDot" style="display:none;"></span>
+                </div>
+                <div class="icon-btn" title="View site" onclick="window.open('/', '_blank')">
+                    <i class="bi bi-globe"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- PAGE CONTENT -->
+        <main class="page-content">
+
+            <!-- ======== DASHBOARD ======== -->
+            <div class="section-page active" id="page-dashboard">
+                <div class="stats-row" id="statsRow">
+                    <div class="stat-card blue">
+                        <div class="stat-icon blue"><i class="bi bi-collection"></i></div>
+                        <div class="stat-value" id="s-total">–</div>
+                        <div class="stat-label">Total Items Reported</div>
+                    </div>
+                    <div class="stat-card red">
+                        <div class="stat-icon red"><i class="bi bi-exclamation-circle"></i></div>
+                        <div class="stat-value" id="s-lost">–</div>
+                        <div class="stat-label">Lost Items</div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="stat-icon green"><i class="bi bi-box-arrow-in-down"></i></div>
+                        <div class="stat-value" id="s-found">–</div>
+                        <div class="stat-label">Found Items</div>
+                    </div>
+                    <div class="stat-card yellow">
+                        <div class="stat-icon yellow"><i class="bi bi-hand-thumbs-up"></i></div>
+                        <div class="stat-value" id="s-claims">–</div>
+                        <div class="stat-label">Total Claims</div>
+                    </div>
+                    <div class="stat-card purple">
+                        <div class="stat-icon purple"><i class="bi bi-hourglass-split"></i></div>
+                        <div class="stat-value" id="s-pending">–</div>
+                        <div class="stat-label">Pending Claims</div>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-lg-8">
+                        <!-- Items By Status -->
+                        <div class="dash-card mb-3">
+                            <div class="dash-card-title">
+                                <span><i class="bi bi-bar-chart me-2 text-primary"></i>Items by Status</span>
+                            </div>
+                            <div id="statusProgress">
+                                <div class="progress-item">
+                                    <div class="progress-label"><span>Lost – Pending</span><span id="pct-lp">0</span>
+                                    </div>
+                                    <div class="progress-bar-wrap">
+                                        <div class="progress-bar-fill" id="bar-lp" style="width:0%;background:#f59e0b;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="progress-item">
+                                    <div class="progress-label"><span>Lost – Approved</span><span id="pct-la">0</span>
+                                    </div>
+                                    <div class="progress-bar-wrap">
+                                        <div class="progress-bar-fill" id="bar-la" style="width:0%;background:#6366f1;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="progress-item">
+                                    <div class="progress-label"><span>Found – Pending</span><span id="pct-fp">0</span>
+                                    </div>
+                                    <div class="progress-bar-wrap">
+                                        <div class="progress-bar-fill" id="bar-fp" style="width:0%;background:#0ea5e9;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="progress-item">
+                                    <div class="progress-label"><span>Found – Approved</span><span id="pct-fa">0</span>
+                                    </div>
+                                    <div class="progress-bar-wrap">
+                                        <div class="progress-bar-fill" id="bar-fa" style="width:0%;background:#10b981;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="progress-item">
+                                    <div class="progress-label"><span>Claimed Items</span><span id="pct-cl">0</span>
+                                    </div>
+                                    <div class="progress-bar-wrap">
+                                        <div class="progress-bar-fill" id="bar-cl" style="width:0%;background:#8b5cf6;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Items -->
+                        <div class="dash-card">
+                            <div class="dash-card-title">
+                                <span><i class="bi bi-clock-history me-2 text-primary"></i>Recent Activity</span>
+                                <a href="#" class="btn-primary-sm" style="font-size:0.75rem;padding:4px 10px;"
+                                    data-page="manage-items">View All</a>
+                            </div>
+                            <div style="overflow-x:auto;">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Type</th>
+                                            <th>Category</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentActivity"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <!-- Categories -->
+                        <div class="dash-card mb-3">
+                            <div class="dash-card-title"><span><i class="bi bi-tags me-2 text-primary"></i>Items by
+                                    Category</span></div>
+                            <div id="categoryBreakdown"></div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="dash-card">
+                            <div class="dash-card-title"><span><i class="bi bi-lightning me-2 text-primary"></i>Quick
+                                    Actions</span></div>
+                            <div style="display:flex;flex-direction:column;gap:0.5rem;">
+                                <button class="btn-primary-sm w-100 justify-content-center" data-page="claims"><i
+                                        class="bi bi-hand-thumbs-up"></i> Review Claims</button>
+                                <button class="btn-primary-sm w-100 justify-content-center" data-page="manage-items"><i
+                                        class="bi bi-pencil-square"></i> Manage Items</button>
+                                <button class="btn-primary-sm w-100 justify-content-center" data-page="users"><i
+                                        class="bi bi-people"></i> Manage Users</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== MANAGE ITEMS ======== -->
+            <div class="section-page" id="page-manage-items">
+                <div class="dash-card">
+                    <div class="dash-card-title">
+                        <span><i class="bi bi-boxes me-2 text-primary"></i>All Items</span>
+                        <div style="display:flex;gap:0.5rem;">
+                            <select class="form-ctrl" id="filterItemType" style="width:auto;">
+                                <option value="all">All Types</option>
+                                <option value="lost">Lost</option>
+                                <option value="found">Found</option>
+                            </select>
+                            <select class="form-ctrl" id="filterItemStatus" style="width:auto;">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
+                                <option value="claimed">Claimed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Item Name</th>
+                                    <th>Type</th>
+                                    <th>Category</th>
+                                    <th>Location</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allItemsTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== LOST ITEMS ======== -->
+            <div class="section-page" id="page-lost-items">
+                <div class="dash-card">
+                    <div class="dash-card-title"><span><i class="bi bi-exclamation-circle me-2 text-danger"></i>Lost
+                            Items Reported</span></div>
+                    <div style="overflow-x:auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Item Name</th>
+                                    <th>Category</th>
+                                    <th>Location</th>
+                                    <th>Reporter</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lostItemsTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== REPORTERS ======== -->
+            <div class="section-page" id="page-reporters">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="dash-card">
+                            <div class="dash-card-title"><span><i class="bi bi-megaphone me-2 text-danger"></i>Lost Item
+                                    Reporters</span></div>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Reports</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lostReportersTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="dash-card">
+                            <div class="dash-card-title"><span><i
+                                        class="bi bi-hand-thumbs-up me-2 text-success"></i>Found Item Finders</span>
+                            </div>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Reports</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="foundReportersTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== CLAIMS ======== -->
+            <div class="section-page" id="page-claims">
+                <div class="dash-card">
+                    <div class="dash-card-title">
+                        <span><i class="bi bi-hand-thumbs-up me-2 text-primary"></i>Claim Requests</span>
+                        <select class="form-ctrl" id="filterClaimStatus" style="width:auto;" onchange="loadClaims()">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Type</th>
+                                    <th>Claimant</th>
+                                    <th>Contact</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="claimsTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== CLAIMED ITEMS ======== -->
+            <div class="section-page" id="page-claimed-items">
+                <div class="dash-card">
+                    <div class="dash-card-title"><span><i class="bi bi-check-circle me-2 text-success"></i>Successfully
+                            Claimed Items</span></div>
+                    <div style="overflow-x:auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Type</th>
+                                    <th>Claimed By</th>
+                                    <th>Email</th>
+                                    <th>Date</th>
+                                    <th>Proof</th>
+                                </tr>
+                            </thead>
+                            <tbody id="claimedItemsTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== NOTIFICATIONS ======== -->
+            <div class="section-page" id="page-notifications">
+                <div class="dash-card">
+                    <div class="dash-card-title"><span><i class="bi bi-bell me-2 text-primary"></i>Notifications</span>
+                    </div>
+                    <div id="notificationsList"></div>
+                </div>
+            </div>
+
+            <!-- ======== USER MANAGEMENT ======== -->
+            <div class="section-page" id="page-users">
+                <div class="dash-card">
+                    <div class="dash-card-title"><span><i class="bi bi-person-gear me-2 text-primary"></i>User
+                            Management</span></div>
+                    <div style="overflow-x:auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Joined</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== SYSTEM LOGS ======== -->
+            <div class="section-page" id="page-logs">
+                <div class="dash-card">
+                    <div class="dash-card-title"><span><i class="bi bi-journal-text me-2 text-primary"></i>System
+                            Logs</span></div>
+                    <div id="logsList"></div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- EDIT ITEM MODAL -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-box">
+            <div class="modal-hdr">
+                <h5><i class="bi bi-pencil me-2"></i>Edit Item</h5>
+                <button class="modal-close" onclick="closeModal('editModal')">&times;</button>
+            </div>
+            <form id="editItemForm">
+                <input type="hidden" id="editItemId" /><input type="hidden" id="editItemType" />
+                <div class="mb-3"><label class="form-lbl">Item Name</label><input type="text" class="form-ctrl"
+                        id="editItemName" /></div>
+                <div class="mb-3"><label class="form-lbl">Category</label>
+                    <select class="form-ctrl" id="editItemCategory">
+                        <option>Electronics</option>
+                        <option>Clothing</option>
+                        <option>Books</option>
+                        <option>Accessories</option>
+                        <option>Documents</option>
+                        <option>Bags</option>
+                        <option>Keys</option>
+                        <option>Wallet</option>
+                        <option>Jewelry</option>
+                        <option>Sports</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="mb-3"><label class="form-lbl">Description</label><textarea class="form-ctrl"
+                        id="editItemDesc" rows="3"></textarea></div>
+                <div class="mb-3"><label class="form-lbl">Status</label>
+                    <select class="form-ctrl" id="editItemStatus">
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="claimed">Claimed</option>
+                    </select>
+                </div>
+                <div class="mb-3"><label class="form-lbl">Admin Note</label><input type="text" class="form-ctrl"
+                        id="editAdminNote" /></div>
+                <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
+                    <button type="button" class="btn-light-sm" onclick="closeModal('editModal')">Cancel</button>
+                    <button type="submit" class="btn-primary-sm"><i class="bi bi-check"></i> Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CLAIM REVIEW MODAL -->
+    <div class="modal-overlay" id="claimModal">
+        <div class="modal-box">
+            <div class="modal-hdr">
+                <h5><i class="bi bi-hand-thumbs-up me-2"></i>Review Claim</h5>
+                <button class="modal-close" onclick="closeModal('claimModal')">&times;</button>
+            </div>
+            <div id="claimModalBody"></div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Items – Campus Lost &amp; Found</title>
+    <meta name="description" content="Search for lost and found items on campus. Filter by category, type, and date." />
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .results-count {
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .sidebar-filter {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+        }
+
+        .filter-section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            cursor: pointer;
+        }
+
+        .filter-option input[type="radio"],
+        .filter-option input[type="checkbox"] {
+            accent-color: var(--primary);
+            width: 16px;
+            height: 16px;
+        }
+
+        .category-list .filter-option label {
+            color: var(--dark);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .item-detail-modal .modal-img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: var(--radius);
+        }
+
+        .item-detail-modal .meta-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .item-detail-modal .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <div class="brand-icon"><i class="bi bi-search-heart"></i></div>
+                <span class="brand-text">Campus Lost &amp; Found</span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+                <span class="navbar-toggler-icon" style="filter:invert(1)"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMain">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="/search"><i class="bi bi-search me-1"></i>Search
+                            Items</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/report-found"><i
+                                class="bi bi-box-arrow-in-down me-1"></i>Report Found</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/report-lost"><i
+                                class="bi bi-exclamation-circle me-1"></i>Report Lost</a></li>
+                    <li class="nav-item ms-2"><a class="nav-link btn-nav-admin px-3" href="/admin"><i
+                                class="bi bi-shield-lock me-1"></i>Admin Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Hero -->
+    <section class="search-hero">
+        <div class="container">
+            <h1 class="text-white fw-800 mb-2" style="font-size:2.2rem;">🔍 Search Items</h1>
+            <p style="color:rgba(255,255,255,0.7);" class="mb-4">Browse all reported lost and found items across campus
+            </p>
+            <div class="search-box">
+                <div class="search-input-group">
+                    <input type="text" id="searchInput" placeholder="Search by item name, description, or location…" />
+                    <button class="btn btn-primary btn-lg px-4" id="searchBtn">
+                        <i class="bi bi-search me-2"></i>Search
+                    </button>
+                </div>
+                <div class="filter-chips" id="typeChips">
+                    <span class="filter-chip active" data-type="all">All Items</span>
+                    <span class="filter-chip" data-type="lost">Lost Items</span>
+                    <span class="filter-chip" data-type="found">Found Items</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container py-4" style="margin-top:-2rem;position:relative;z-index:5;">
+        <div class="row g-4">
+            <!-- Sidebar Filters -->
+            <div class="col-lg-3">
+                <div class="sidebar-filter">
+                    <div class="filter-section-title">Category</div>
+                    <div class="category-list" id="categoryFilters">
+                        <div class="filter-option">
+                            <input type="radio" name="category" id="cat-all" value="all" checked>
+                            <label for="cat-all">All Categories</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="category" id="cat-electronics" value="Electronics">
+                            <label for="cat-electronics"><i
+                                    class="bi bi-phone me-1 text-primary"></i>Electronics</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="category" id="cat-books" value="Books">
+                            <label for="cat-books"><i class="bi bi-book me-1 text-primary"></i>Books</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="category" id="cat-keys" value="Keys">
+                            <label for="cat-keys"><i class="bi bi-key me-1 text-primary"></i>Keys</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="category" id="cat-wallet" value="Wallet">
+                            <label for="cat-wallet"><i class="bi bi-credit-card me-1 text-primary"></i>Wallet</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="category" id="cat-bags" value="Bags">
+                            <label for="cat-bags"><i class="bi bi-bag me-1 text-primary"></i>Bags</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="category" id="cat-clothing" value="Clothing">
+                            <label for="cat-clothing"><i
+                                    class="bi bi-person-bounding-box me-1 text-primary"></i>Clothing</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="category" id="cat-accessories" value="Accessories">
+                            <label for="cat-accessories"><i
+                                    class="bi bi-watch me-1 text-primary"></i>Accessories</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="category" id="cat-documents" value="Documents">
+                            <label for="cat-documents"><i
+                                    class="bi bi-file-earmark me-1 text-primary"></i>Documents</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="category" id="cat-jewelry" value="Jewelry">
+                            <label for="cat-jewelry"><i class="bi bi-gem me-1 text-primary"></i>Jewelry</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="category" id="cat-sports" value="Sports">
+                            <label for="cat-sports"><i class="bi bi-trophy me-1 text-primary"></i>Sports</label>
+                        </div>
+                        <div class="filter-option">
+                            <input type="radio" name="category" id="cat-other" value="Other">
+                            <label for="cat-other"><i class="bi bi-three-dots me-1 text-primary"></i>Other</label>
+                        </div>
+                    </div>
+
+                    <hr class="my-3" />
+
+                    <div class="filter-section-title">Sort By</div>
+                    <select class="form-select form-select-sm" id="sortBy">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                    </select>
+
+                    <hr class="my-3" />
+                    <button class="btn btn-primary w-100" id="applyFilters">
+                        <i class="bi bi-funnel me-2"></i>Apply Filters
+                    </button>
+                    <button class="btn btn-light w-100 mt-2" id="clearFilters">
+                        <i class="bi bi-x-circle me-2"></i>Clear Filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Area -->
+            <div class="col-lg-9">
+                <div class="results-header">
+                    <div class="results-count" id="resultsCount">Loading items…</div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-light" id="viewGrid" title="Grid view"><i
+                                class="bi bi-grid-3x3-gap"></i></button>
+                        <button class="btn btn-sm btn-light" id="viewList" title="List view"><i
+                                class="bi bi-list-ul"></i></button>
+                    </div>
+                </div>
+
+                <!-- Items Grid -->
+                <div id="itemsContainer" class="row g-3">
+                    <div class="col-12 loading-spinner">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="d-flex justify-content-center mt-4" id="pagination"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Detail Modal -->
+    <div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel">
+        <div class="modal-dialog modal-lg modal-dialog-centered item-detail-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="itemModalLabel">Item Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="itemModalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Claim Modal -->
+    <div class="modal fade" id="claimModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-hand-thumbs-up me-2"></i>Submit Claim Request</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="claimForm" enctype="multipart/form-data">
+                        <input type="hidden" id="claimItemId" name="itemId" />
+                        <input type="hidden" id="claimItemType" name="itemType" />
+                        <input type="hidden" id="claimItemName" name="itemName" />
+                        <div class="mb-3">
+                            <label class="form-label">Your Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="claimantName" required
+                                placeholder="Full name" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" name="claimantEmail" required
+                                placeholder="your@email.com" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="text" class="form-control" name="claimantPhone" placeholder="+91 XXXXXXXXXX" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Describe why this item belongs to you <span
+                                    class="text-danger">*</span></label>
+                            <textarea class="form-control" name="description" rows="3" required
+                                placeholder="Provide details that prove ownership…"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Upload Proof (optional)</label>
+                            <input type="file" class="form-control" name="proof" accept="image/*" />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-send me-2"></i>Submit Claim
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container">
+        <div id="toastMsg" class="toast custom-toast align-items-center text-white border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body" id="toastBody"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+
+    <footer style="background:var(--darker);color:rgba(255,255,255,0.6);padding:2rem 0;margin-top:4rem;">
+        <div class="container text-center">
+            <p class="mb-0" style="font-size:0.9rem;">&copy; 2024 Campus Lost &amp; Found System. <a href="/"
+                    style="color:var(--primary-light);">Home</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/search.js"></script>
+</body>
+
+</html>

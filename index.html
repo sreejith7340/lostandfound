@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campus Lost & Found – Reuniting Students with Their Belongings</title>
+  <meta name="description" content="Campus Lost & Found System helps students report, search, and recover lost and found items on campus quickly and easily." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>" />
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<!-- ==============================
+     NAVIGATION
+     ============================== -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <div class="brand-icon"><i class="bi bi-search-heart"></i></div>
+      <span class="brand-text">Campus Lost &amp; Found</span>
+    </a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+      <span class="navbar-toggler-icon" style="filter:invert(1)"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item"><a class="nav-link" href="/search"><i class="bi bi-search me-1"></i>Search Items</a></li>
+        <li class="nav-item"><a class="nav-link" href="/report-found"><i class="bi bi-box-arrow-in-down me-1"></i>Report Found</a></li>
+        <li class="nav-item"><a class="nav-link" href="/report-lost"><i class="bi bi-exclamation-circle me-1"></i>Report Lost</a></li>
+        <li class="nav-item ms-2"><a class="nav-link btn-nav-admin px-3" href="/admin"><i class="bi bi-shield-lock me-1"></i>Admin Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ==============================
+     HERO SECTION
+     ============================== -->
+<section class="hero-section">
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+
+  <div class="container">
+    <div class="hero-content">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+          <div class="hero-badge">
+            <i class="bi bi-stars"></i> Campus-Wide System
+          </div>
+          <h1 class="hero-title">
+            Lost <span class="highlight">Something?</span>
+          </h1>
+          <p class="hero-subtitle">We'll Help You Find It!</p>
+          <p class="hero-description">
+            Our campus lost and found system helps reunite students with their belongings. Report, search, and claim items quickly and easily.
+          </p>
+
+          <div class="hero-stats mb-4">
+            <div class="hero-stat">
+              <span class="number" id="statTotal">–</span>
+              <span class="label">Items Reported</span>
+            </div>
+            <div class="hero-stat">
+              <span class="number" id="statFound">–</span>
+              <span class="label">Items Found</span>
+            </div>
+            <div class="hero-stat">
+              <span class="number" id="statClaimed">–</span>
+              <span class="label">Items Claimed</span>
+            </div>
+          </div>
+
+          <div class="hero-buttons">
+            <a href="/search?type=lost" class="btn btn-glow btn-lg">
+              <i class="bi bi-search"></i> Search Lost Items
+            </a>
+            <a href="/report-found" class="btn btn-success btn-lg">
+              <i class="bi bi-box-arrow-in-down"></i> Report Found Item
+            </a>
+            <a href="/report-lost" class="btn btn-outline-light btn-lg">
+              <i class="bi bi-exclamation-circle"></i> Report Lost Item
+            </a>
+          </div>
+        </div>
+
+        <div class="col-lg-5 d-none d-lg-block">
+          <div class="hero-card">
+            <div class="d-flex align-items-center mb-3">
+              <div style="width:10px;height:10px;border-radius:50%;background:#ef4444;margin-right:6px;"></div>
+              <div style="width:10px;height:10px;border-radius:50%;background:#f59e0b;margin-right:6px;"></div>
+              <div style="width:10px;height:10px;border-radius:50%;background:#10b981;"></div>
+              <span style="color:rgba(255,255,255,0.4);font-size:0.75rem;margin-left:auto;">Lost &amp; Found System</span>
+            </div>
+            <div class="hero-icon-grid">
+              <div class="hero-icon-item" onclick="window.location='/report-lost'">
+                <i class="bi bi-question-circle"></i>
+                <span>Lost Item</span>
+              </div>
+              <div class="hero-icon-item" onclick="window.location='/report-found'">
+                <i class="bi bi-check-circle"></i>
+                <span>Found Item</span>
+              </div>
+              <div class="hero-icon-item" onclick="window.location='/search'">
+                <i class="bi bi-search"></i>
+                <span>Search</span>
+              </div>
+              <div class="hero-icon-item">
+                <i class="bi bi-phone"></i>
+                <span>Phone</span>
+              </div>
+              <div class="hero-icon-item">
+                <i class="bi bi-laptop"></i>
+                <span>Laptop</span>
+              </div>
+              <div class="hero-icon-item">
+                <i class="bi bi-key"></i>
+                <span>Keys</span>
+              </div>
+              <div class="hero-icon-item">
+                <i class="bi bi-bag"></i>
+                <span>Bags</span>
+              </div>
+              <div class="hero-icon-item">
+                <i class="bi bi-journal-bookmark"></i>
+                <span>Books</span>
+              </div>
+              <div class="hero-icon-item">
+                <i class="bi bi-credit-card-2-front"></i>
+                <span>Wallet</span>
+              </div>
+            </div>
+            <!-- Recent items preview -->
+            <div id="recentPreview">
+              <div style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-bottom:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Recent Reports</div>
+              <div id="recentItems" style="display:flex;flex-direction:column;gap:8px;">
+                <div class="d-flex align-items-center gap-2" style="background:rgba(255,255,255,0.05);border-radius:8px;padding:10px;">
+                  <div style="width:32px;height:32px;background:linear-gradient(135deg,#6366f1,#0ea5e9);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;">📱</div>
+                  <div>
+                    <div style="color:white;font-size:0.82rem;font-weight:600;">iPhone 14 Pro</div>
+                    <div style="color:rgba(255,255,255,0.4);font-size:0.72rem;">Library – Lost</div>
+                  </div>
+                  <span style="margin-left:auto;background:rgba(239,68,68,0.2);color:#fca5a5;border-radius:4px;padding:2px 8px;font-size:0.7rem;">Lost</span>
+                </div>
+                <div class="d-flex align-items-center gap-2" style="background:rgba(255,255,255,0.05);border-radius:8px;padding:10px;">
+                  <div style="width:32px;height:32px;background:linear-gradient(135deg,#10b981,#059669);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;">🔑</div>
+                  <div>
+                    <div style="color:white;font-size:0.82rem;font-weight:600;">Car Keys</div>
+                    <div style="color:rgba(255,255,255,0.4);font-size:0.72rem;">Cafeteria – Found</div>
+                  </div>
+                  <span style="margin-left:auto;background:rgba(16,185,129,0.2);color:#6ee7b7;border-radius:4px;padding:2px 8px;font-size:0.7rem;">Found</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     HOW IT WORKS
+     ============================== -->
+<section class="how-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge">How It Works</div>
+      <h2 class="section-title">Simple 3-Step Process</h2>
+      <p class="section-description">Get started in minutes. Our streamlined process makes it easy to report and recover items.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h5 class="fw-700 mb-2">Report an Item</h5>
+          <p class="text-muted mb-0">Lost something? Found something? Fill out a quick form with the item details, location, and your contact info.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h5 class="fw-700 mb-2">Admin Reviews</h5>
+          <p class="text-muted mb-0">Our admin team reviews and approves the report, making it visible to the campus community.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h5 class="fw-700 mb-2">Get Reunited</h5>
+          <p class="text-muted mb-0">Submit a claim request. Once verified, the item gets returned to its rightful owner.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     FEATURES
+     ============================== -->
+<section class="feature-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge">Features</div>
+      <h2 class="section-title">Everything You Need</h2>
+      <p class="section-description">A complete system built to handle every aspect of lost and found management on campus.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="feature-card">
+          <div class="feature-icon icon-primary"><i class="bi bi-search"></i></div>
+          <h5>Smart Search</h5>
+          <p>Search and filter items by name, category, date, or location to find what you're looking for quickly.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="feature-card">
+          <div class="feature-icon icon-success"><i class="bi bi-cloud-upload"></i></div>
+          <h5>Image Upload</h5>
+          <p>Upload photos of lost or found items to help with identification and speed up the recovery process.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="feature-card">
+          <div class="feature-icon icon-warning"><i class="bi bi-shield-check"></i></div>
+          <h5>Admin Verified</h5>
+          <p>Every report is reviewed and approved by campus administrators before going live on the platform.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="feature-card">
+          <div class="feature-icon icon-info"><i class="bi bi-hand-thumbs-up"></i></div>
+          <h5>Easy Claims</h5>
+          <p>Submit a claim with proof of ownership. Our admin team reviews and facilitates the safe return of items.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     STATS
+     ============================== -->
+<section class="stats-section">
+  <div class="container position-relative">
+    <div class="text-center mb-5">
+      <h2 class="fw-800 text-white" style="font-size:2.2rem;">Trusted by the Campus Community</h2>
+      <p style="color:rgba(255,255,255,0.6);">Real-time statistics from our platform</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-6 col-lg-3">
+        <div class="stat-card">
+          <div class="stat-number" id="heroStatLost">–</div>
+          <div class="stat-label">Lost Items Reported</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-card">
+          <div class="stat-number" id="heroStatFound">–</div>
+          <div class="stat-label">Found Items Listed</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-card">
+          <div class="stat-number" id="heroStatClaimed">–</div>
+          <div class="stat-label">Items Claimed</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="stat-card">
+          <div class="stat-number" id="heroStatUsers">–</div>
+          <div class="stat-label">Active Users</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     CATEGORIES
+     ============================== -->
+<section class="py-5" style="background:white;">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge">Categories</div>
+      <h2 class="section-title">Browse by Category</h2>
+    </div>
+    <div class="row g-3 justify-content-center">
+      <div class="col-auto"><a href="/search?category=Electronics" class="btn btn-light rounded-pill px-4"><i class="bi bi-phone me-2"></i>Electronics</a></div>
+      <div class="col-auto"><a href="/search?category=Books" class="btn btn-light rounded-pill px-4"><i class="bi bi-book me-2"></i>Books</a></div>
+      <div class="col-auto"><a href="/search?category=Keys" class="btn btn-light rounded-pill px-4"><i class="bi bi-key me-2"></i>Keys</a></div>
+      <div class="col-auto"><a href="/search?category=Wallet" class="btn btn-light rounded-pill px-4"><i class="bi bi-credit-card me-2"></i>Wallet</a></div>
+      <div class="col-auto"><a href="/search?category=Bags" class="btn btn-light rounded-pill px-4"><i class="bi bi-bag me-2"></i>Bags</a></div>
+      <div class="col-auto"><a href="/search?category=Clothing" class="btn btn-light rounded-pill px-4"><i class="bi bi-person-bounding-box me-2"></i>Clothing</a></div>
+      <div class="col-auto"><a href="/search?category=Accessories" class="btn btn-light rounded-pill px-4"><i class="bi bi-watch me-2"></i>Accessories</a></div>
+      <div class="col-auto"><a href="/search?category=Documents" class="btn btn-light rounded-pill px-4"><i class="bi bi-file-earmark me-2"></i>Documents</a></div>
+      <div class="col-auto"><a href="/search?category=Other" class="btn btn-light rounded-pill px-4"><i class="bi bi-three-dots me-2"></i>Other</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:linear-gradient(135deg,#6366f1,#0ea5e9);padding:5rem 0;">
+  <div class="container text-center">
+    <h2 class="fw-800 text-white mb-3" style="font-size:2.5rem;">Ready to Get Started?</h2>
+    <p class="text-white mb-4" style="opacity:0.85;font-size:1.1rem;">Join thousands of students who use our platform every day.</p>
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+      <a href="/report-lost" class="btn btn-light btn-lg fw-700 text-primary">
+        <i class="bi bi-exclamation-circle me-2"></i>Report Lost Item
+      </a>
+      <a href="/report-found" class="btn btn-outline-light btn-lg fw-700">
+        <i class="bi bi-box-arrow-in-down me-2"></i>Report Found Item
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ==============================
+     FOOTER
+     ============================== -->
+<footer>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="footer-brand mb-2">Campus Lost &amp; Found</div>
+        <p style="font-size:0.9rem;color:rgba(255,255,255,0.5);">Helping students reunite with their belongings through a smart, community-driven platform.</p>
+      </div>
+      <div class="col-lg-2 col-6">
+        <h5>Platform</h5>
+        <a href="/search">Search Items</a>
+        <a href="/report-lost">Report Lost</a>
+        <a href="/report-found">Report Found</a>
+      </div>
+      <div class="col-lg-2 col-6">
+        <h5>Admin</h5>
+        <a href="/admin">Admin Login</a>
+        <a href="/admin/dashboard">Dashboard</a>
+      </div>
+      <div class="col-lg-4">
+        <h5>Categories</h5>
+        <div class="d-flex flex-wrap gap-2">
+          <a href="/search?category=Electronics" style="display:inline;margin:0;">Electronics</a>
+          <a href="/search?category=Books" style="display:inline;margin:0;">Books</a>
+          <a href="/search?category=Keys" style="display:inline;margin:0;">Keys</a>
+          <a href="/search?category=Wallet" style="display:inline;margin:0;">Wallet</a>
+        </div>
+      </div>
+    </div>
+    <hr class="footer-divider" />
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+      <p style="margin:0;font-size:0.85rem;color:rgba(255,255,255,0.4);">&copy; 2024 Campus Lost &amp; Found System. All rights reserved.</p>
+      <p style="margin:0;font-size:0.85rem;color:rgba(255,255,255,0.4);">Built with ❤️ for Campus Students</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Load live stats from API
+async function loadStats() {
+  try {
+    const res = await fetch('/api/admin/stats');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.success) {
+      const { stats } = data;
+      const animateNum = (el, val) => {
+        if (!el) return;
+        let current = 0;
+        const step = Math.ceil(val / 40);
+        const timer = setInterval(() => {
+          current = Math.min(current + step, val);
+          el.textContent = current;
+          if (current >= val) clearInterval(timer);
+        }, 40);
+      };
+      animateNum(document.getElementById('statTotal'), stats.totalItems);
+      animateNum(document.getElementById('statFound'), stats.totalFound);
+      animateNum(document.getElementById('statClaimed'), stats.approvedClaims);
+      animateNum(document.getElementById('heroStatLost'), stats.totalLost);
+      animateNum(document.getElementById('heroStatFound'), stats.totalFound);
+      animateNum(document.getElementById('heroStatClaimed'), stats.approvedClaims);
+      animateNum(document.getElementById('heroStatUsers'), stats.totalUsers);
+    }
+  } catch (e) {
+    // Silent fail — stats are optional on the landing page
+  }
+}
+loadStats();
+</script>
+</body>
+</html>
